@@ -20,7 +20,7 @@
                         <option value="410">11</option>
                     </select>
                     <button @click="insertImage"> ADD Image</button>
-                    <canvas @mousemove="getmove($event)" id='canvas' :style="{width:selectedWidth+'px', height:selectedHeight+'px', cursor:'all-scroll'}">
+                    <canvas @click="dragStart()" id='canvas' :style="{width:selectedWidth+'px', height:selectedHeight+'px', cursor:'all-scroll'}">
                         Sorry, your browser does not support the canvas tag.
                     </canvas>
                 </div>
@@ -38,7 +38,10 @@
         data(){
             return {
                 selectedHeight: '380',
-                selectedWidth: '380'
+                selectedWidth: '380',
+                isDraggable: false,
+                currentX: 0,
+                currentY: 0
             }
         },
         methods:{
@@ -52,6 +55,8 @@
 
                 // Get a reference to the 2d drawing context / api
                 var ctx = canvas.getContext('2d');
+                this.currentX = canvas.width/2;
+                this.currentY = canvas.height/2;
                 // Create a new image object
                 var image = new Image();
 
@@ -59,18 +64,17 @@
                 // See previous video for a more flexible solution 
                 const self = this
                 image.onload = function(){
-
+                self.Go()
                 // Select a rectangle from the source image,
                 // and then draw is as normal.
                 // ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
                 // (image, srcX, srcY, srcWidth, srcHeight, x, y, width, height)
-                console.log(image.naturalWidth/image.naturalHeight, 'sasas' , self.selectedWidth/self.selectedHeight)
-                ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, self.selectedWidth, self.selectedHeight);
+                // console.log(image.naturalWidth/image.naturalHeight, 'sasas' , self.selectedWidth/self.selectedHeight)
+                // ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, self.selectedWidth, self.selectedHeight);
                 }
 
                 // Start our image loading
                 image.src = '/images/career_bg.jpg';
-                console.log(image, 'sasas')
             },
             getContext(){
                 console.log(this.selectedHeight , this.selectedWidth)
@@ -95,6 +99,67 @@
                 ctx.drawImage(img, x, y);
                 ctx.moveTo(x, y); 
                 // ctx.drawImage(img, 0, 0, self.selectedWidth, self.selectedHeight, x, y, self.selectedWidth, self.selectedHeight);
+            },
+            Go(){
+                this.MouseEvents();
+                const self = this
+                setInterval(function() {
+                    self.ResetCanvas();
+                    self.DrawImage();
+                }, 1000/30);
+            },
+            dragStart(){
+                this.isDraggable = true
+            },
+            ResetCanvas(){
+                var canvas = document.getElementById('canvas');
+                var ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(0,0, canvas.width, canvas.height)
+            },
+            MouseEvents(){
+                var canvas = document.getElementById('canvas');
+                var currentX = canvas.width/2;
+                var currentY = canvas.height/2;
+                const self = this
+                var image = new Image();
+                canvas.onmouseover = function(e) {
+                    console.log(this)
+                    var mouseX = e.pageX - this.offsetLeft;
+                    var mouseY = e.pageY - this.offsetTop;
+                    if (mouseX >= (self.currentX - image.width/2) &&
+                        mouseX <= (self.currentX + image.width/2) &&
+                        mouseY >= (self.currentY - image.height/2) &&
+                        mouseY <= (self.currentY + image.height/2)) {
+                    self.isDraggable = true;
+                    //currentX = mouseX;
+                    //currentY = mouseY;
+                    }
+                };
+                canvas.onmousemove = function(e) {
+                    if (self.isDraggable) {
+                    console.log('sasas')
+                    self.currentX = e.pageX - this.offsetLeft;
+                    self.currentY = e.pageY - this.offsetTop;
+                    }
+                };
+                canvas.onmouseup = function(e) {
+                    self.isDraggable = false;
+                };
+                canvas.onmouseout = function(e) {
+                    self.isDraggable = false;
+                };
+            },
+            DrawImage(){
+                var  canvas = document.getElementById("canvas");
+                var context = canvas.getContext("2d");
+                var image = new Image();
+                image.src = '/images/career_bg.jpg';
+                const self = this;
+                // console.log(image.naturalWidth/image.naturalHeight, 'sasas' , self.selectedWidth/self.selectedHeight)
+                // ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, self.selectedWidth, self.selectedHeight);
+                context.drawImage(image, self.currentX-(image.width/2), self.currentY-(image.height/2));
+                
             }
         }
     }

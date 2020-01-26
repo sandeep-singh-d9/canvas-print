@@ -189,6 +189,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -258,7 +267,10 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       selectedHeight: '380',
-      selectedWidth: '380'
+      selectedWidth: '380',
+      isDraggable: false,
+      currentX: 0,
+      currentY: 0
     };
   },
   methods: {
@@ -269,7 +281,9 @@ __webpack_require__.r(__webpack_exports__);
       canvas.width = canvas.scrollWidth;
       canvas.height = canvas.scrollHeight; // Get a reference to the 2d drawing context / api
 
-      var ctx = canvas.getContext('2d'); // Create a new image object
+      var ctx = canvas.getContext('2d');
+      this.currentX = canvas.width / 2;
+      this.currentY = canvas.height / 2; // Create a new image object
 
       var image = new Image(); // Callback, executed when the image is loaded
       // See previous video for a more flexible solution 
@@ -277,17 +291,16 @@ __webpack_require__.r(__webpack_exports__);
       var self = this;
 
       image.onload = function () {
-        // Select a rectangle from the source image,
+        self.Go(); // Select a rectangle from the source image,
         // and then draw is as normal.
         // ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
         // (image, srcX, srcY, srcWidth, srcHeight, x, y, width, height)
-        console.log(image.naturalWidth / image.naturalHeight, 'sasas', self.selectedWidth / self.selectedHeight);
-        ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, self.selectedWidth, self.selectedHeight);
+        // console.log(image.naturalWidth/image.naturalHeight, 'sasas' , self.selectedWidth/self.selectedHeight)
+        // ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, self.selectedWidth, self.selectedHeight);
       }; // Start our image loading
 
 
       image.src = '/images/career_bg.jpg';
-      console.log(image, 'sasas');
     },
     getContext: function getContext() {
       console.log(this.selectedHeight, this.selectedWidth);
@@ -309,6 +322,67 @@ __webpack_require__.r(__webpack_exports__);
       var self = this;
       ctx.drawImage(img, x, y);
       ctx.moveTo(x, y); // ctx.drawImage(img, 0, 0, self.selectedWidth, self.selectedHeight, x, y, self.selectedWidth, self.selectedHeight);
+    },
+    Go: function Go() {
+      this.MouseEvents();
+      var self = this;
+      setInterval(function () {
+        self.ResetCanvas();
+        self.DrawImage();
+      }, 1000 / 30);
+    },
+    dragStart: function dragStart() {
+      this.isDraggable = true;
+    },
+    ResetCanvas: function ResetCanvas() {
+      var canvas = document.getElementById('canvas');
+      var ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    },
+    MouseEvents: function MouseEvents() {
+      var canvas = document.getElementById('canvas');
+      var currentX = canvas.width / 2;
+      var currentY = canvas.height / 2;
+      var self = this;
+      var image = new Image();
+
+      canvas.onmouseover = function (e) {
+        console.log(this);
+        var mouseX = e.pageX - this.offsetLeft;
+        var mouseY = e.pageY - this.offsetTop;
+
+        if (mouseX >= self.currentX - image.width / 2 && mouseX <= self.currentX + image.width / 2 && mouseY >= self.currentY - image.height / 2 && mouseY <= self.currentY + image.height / 2) {
+          self.isDraggable = true; //currentX = mouseX;
+          //currentY = mouseY;
+        }
+      };
+
+      canvas.onmousemove = function (e) {
+        if (self.isDraggable) {
+          console.log('sasas');
+          self.currentX = e.pageX - this.offsetLeft;
+          self.currentY = e.pageY - this.offsetTop;
+        }
+      };
+
+      canvas.onmouseup = function (e) {
+        self.isDraggable = false;
+      };
+
+      canvas.onmouseout = function (e) {
+        self.isDraggable = false;
+      };
+    },
+    DrawImage: function DrawImage() {
+      var canvas = document.getElementById("canvas");
+      var context = canvas.getContext("2d");
+      var image = new Image();
+      image.src = '/images/career_bg.jpg';
+      var self = this; // console.log(image.naturalWidth/image.naturalHeight, 'sasas' , self.selectedWidth/self.selectedHeight)
+      // ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, self.selectedWidth, self.selectedHeight);
+
+      context.drawImage(image, self.currentX - image.width / 2, self.currentY - image.height / 2);
     }
   }
 });
@@ -5071,7 +5145,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\ncanvas {\n  /*Add a border around canvas for legibility*/\n  border: 1px solid grey;\n}\n", ""]);
+exports.push([module.i, "\ncanvas {\r\n  /*Add a border around canvas for legibility*/\r\n  border: 1px solid grey;\n}\r\n", ""]);
 
 // exports
 
@@ -19457,457 +19531,474 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "builder" }, [
-    _c("div", [
-      _c(
-        "select",
-        {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.selectedCanvasWidth,
-              expression: "selectedCanvasWidth"
-            }
-          ],
-          on: {
-            change: [
-              function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.selectedCanvasWidth = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              },
-              _vm.getContext
-            ]
-          }
-        },
-        [
-          _c("option", { attrs: { value: "8" } }, [_vm._v("8")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "9" } }, [_vm._v("9")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "10" } }, [_vm._v("10")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "11" } }, [_vm._v("11")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "12" } }, [_vm._v("12")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "16" } }, [_vm._v("16")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "18" } }, [_vm._v("18")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "20" } }, [_vm._v("20")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "24" } }, [_vm._v("24")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "30" } }, [_vm._v("30")])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "select",
-        {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.selectedCanvasHeight,
-              expression: "selectedCanvasHeight"
-            }
-          ],
-          on: {
-            change: [
-              function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.selectedCanvasHeight = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              },
-              _vm.getContext
-            ]
-          }
-        },
-        [
-          _c("option", { attrs: { value: "8" } }, [_vm._v("8")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "9" } }, [_vm._v("9")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "10" } }, [_vm._v("10")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "11" } }, [_vm._v("11")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "12" } }, [_vm._v("12")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "18" } }, [_vm._v("18")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "24" } }, [_vm._v("24")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "30" } }, [_vm._v("30")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "36" } }, [_vm._v("36")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "36" } }, [_vm._v("36")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "40" } }, [_vm._v("40")])
-        ]
-      )
-    ]),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass:
-          "builder__preview-main-section grid__item medium--two-thirds large--two-thirds",
-        staticStyle: { height: "627px", opacity: "1" }
-      },
-      [
-        _c("div", { staticClass: "display-table" }, [
-          _c("div", { staticClass: "display-table-cell" }, [
-            _c(
-              "div",
-              {
-                staticClass: "builder__preview-column",
-                style: { opacity: "1", width: _vm.selectedHeight + "px" }
-              },
-              [
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "builder__preview-section builder__preview-section-1",
-                    style: {
-                      paddingLeft: "66.4369px",
-                      width: _vm.selectedHeight + "px"
-                    }
-                  },
-                  [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _vm._m(1),
-                    _vm._v(" "),
-                    _vm._m(2),
-                    _vm._v(" "),
-                    _vm._m(3),
-                    _vm._v(" "),
-                    _vm._m(4)
-                  ]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "clearfix" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "builder__preview-warning" }),
-            _vm._v(" "),
-            _vm._m(5)
-          ])
-        ])
-      ]
-    )
-  ])
+  return _vm._m(0)
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "builder__preview-top-wrap",
-        staticStyle: { height: "66.4369px", width: "450px" }
-      },
-      [
-        _c(
-          "div",
-          {
-            staticClass: "guillotine-window",
-            staticStyle: {
-              width: "100%",
-              height: "auto",
-              "padding-top": "66.6667%"
-            }
-          },
-          [
-            _c(
-              "div",
-              {
-                staticClass: "guillotine-canvas",
-                staticStyle: {
-                  width: "145.6%",
-                  height: "102.38%",
-                  top: "-1.19%",
-                  left: "-22.8%"
-                }
-              },
-              [
-                _c("img", {
-                  staticClass: "builder__preview-image",
-                  staticStyle: {
-                    perspective: "1000px",
-                    "backface-visibility": "hidden"
-                  },
-                  attrs: {
-                    src:
-                      "https://cdn.filestackcontent.com/rotate%3Ddeg:exif/output%3Dformat:jpg/quality%3Dvalue:40/90Yc2csUQa6GHSVaEWy4"
-                  }
-                })
-              ]
-            )
-          ]
-        )
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "builder__preview-right-wrap",
-        staticStyle: { width: "66.4369px", height: "304px" }
-      },
-      [
-        _c(
-          "div",
-          {
-            staticClass: "guillotine-window",
-            staticStyle: {
-              "padding-top": "66.6667%",
-              height: "304px",
-              width: "450px"
-            }
-          },
-          [
-            _c(
-              "div",
-              {
-                staticClass: "guillotine-canvas",
-                staticStyle: {
-                  width: "145.6%",
-                  height: "102.38%",
-                  top: "-1.19%",
-                  right: "-102.594px",
-                  left: "auto"
-                }
-              },
-              [
-                _c("img", {
-                  staticClass: "builder__preview-image",
-                  staticStyle: {
-                    perspective: "1000px",
-                    "backface-visibility": "hidden",
-                    "margin-left": "0px"
-                  },
-                  attrs: {
-                    src:
-                      "https://cdn.filestackcontent.com/rotate%3Ddeg:exif/output%3Dformat:jpg/quality%3Dvalue:40/90Yc2csUQa6GHSVaEWy4"
-                  }
-                })
-              ]
-            )
-          ]
-        )
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "builder__preview-wrap" }, [
+    return _c("div", { staticClass: "builder" }, [
       _c(
         "div",
         {
-          staticClass: "guillotine-window",
+          staticClass: "print-preview",
           staticStyle: {
-            width: "100%",
-            height: "auto",
-            "padding-top": "66.6667%"
+            display: "inline-block",
+            width: "420px",
+            height: "420px"
           }
         },
         [
           _c(
             "div",
             {
-              staticClass: "guillotine-canvas",
-              staticStyle: {
-                width: "145.6%",
-                height: "102.38%",
-                top: "-1.19%",
-                left: "-22.8%"
-              }
+              staticClass: "edit-text ui-draggable ui-draggable-handle",
+              staticStyle: { display: "none", position: "relative" }
             },
             [
-              _c("img", {
-                staticClass: "builder__preview-main-image",
-                staticStyle: {
-                  perspective: "1000px",
-                  "backface-visibility": "hidden"
-                },
-                attrs: {
-                  src:
-                    "https://cdn.filestackcontent.com/rotate%3Ddeg:exif/output%3Dformat:jpg/quality%3Dvalue:40/90Yc2csUQa6GHSVaEWy4"
-                }
+              _c("i", {
+                staticClass: "fa fa-trash",
+                attrs: { "aria-hidden": "true" }
               })
             ]
-          )
-        ]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "builder__preview-bottom-wrap",
-        staticStyle: { height: "66.4369px", width: "450px" }
-      },
-      [
-        _c("div", { staticClass: "builder__preview-bottom-inner" }, [
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "orientation", staticStyle: { display: "block" } },
+            [_vm._v(" ")]
+          ),
+          _vm._v(" "),
           _c(
             "div",
             {
-              staticClass: "guillotine-window",
-              staticStyle: {
-                width: "100%",
-                height: "auto",
-                "padding-top": "66.6667%"
-              }
+              staticClass: "h-scale",
+              staticStyle: { "margin-left": "20px", width: "380px" }
             },
-            [
-              _c(
-                "div",
-                {
-                  staticClass: "guillotine-canvas",
-                  staticStyle: {
-                    width: "145.6%",
-                    height: "102.38%",
-                    top: "-1.19%",
-                    left: "-22.8%"
-                  }
-                },
-                [
-                  _c("img", {
-                    staticClass: "builder__preview-image",
-                    staticStyle: {
-                      perspective: "1000px",
-                      "backface-visibility": "hidden",
-                      "margin-top": "0px"
-                    },
-                    attrs: {
-                      src:
-                        "https://cdn.filestackcontent.com/rotate%3Ddeg:exif/output%3Dformat:jpg/quality%3Dvalue:40/90Yc2csUQa6GHSVaEWy4"
-                    }
-                  })
-                ]
-              )
-            ]
-          )
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "builder__preview-left-wrap",
-        staticStyle: { width: "66.4369px", top: "66.4369px", height: "304px" }
-      },
-      [
-        _c(
-          "div",
-          {
-            staticClass: "guillotine-window",
-            staticStyle: {
-              "padding-top": "66.6667%",
-              height: "304px",
-              width: "450px"
-            }
-          },
-          [
+            [_c("span", { attrs: { id: "scalewidth" } }, [_vm._v("8 inch")])]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "v-scale",
+              staticStyle: { "margin-top": "20px", height: "380px" }
+            },
+            [_c("span", { attrs: { id: "scaleheight" } }, [_vm._v("8 inch")])]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "preview-img" }, [
             _c(
               "div",
               {
-                staticClass: "guillotine-canvas",
                 staticStyle: {
-                  width: "145.6%",
-                  height: "102.38%",
-                  top: "-1.19%",
-                  left: "-22.8%"
-                }
+                  left: "20px",
+                  position: "relative",
+                  top: "20px"
+                },
+                attrs: { id: "design_tool" }
               },
               [
-                _c("img", {
-                  staticClass: "builder__preview-image",
-                  staticStyle: {
-                    perspective: "1000px",
-                    "backface-visibility": "hidden"
+                _c(
+                  "div",
+                  {
+                    staticClass: "canvas-container",
+                    staticStyle: {
+                      width: "380px",
+                      height: "380px",
+                      position: "absolute!important",
+                      "-moz-user-select": "none",
+                      left: "0px",
+                      top: "0px"
+                    },
+                    attrs: { id: "canvas_container_1" }
                   },
-                  attrs: {
-                    src:
-                      "https://cdn.filestackcontent.com/rotate%3Ddeg:exif/output%3Dformat:jpg/quality%3Dvalue:40/90Yc2csUQa6GHSVaEWy4"
-                  }
-                })
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "canvas-container",
+                        staticStyle: {
+                          width: "380px",
+                          height: "380px",
+                          position: "relative",
+                          "user-select": "none"
+                        }
+                      },
+                      [
+                        _c("canvas", {
+                          staticClass:
+                            "workArea canvas-transition maincanvas lower-canvas ui-droppable",
+                          staticStyle: {
+                            position: "absolute",
+                            width: "380px",
+                            height: "380px",
+                            border: "1px solid rgb(204, 204, 204)",
+                            left: "0px",
+                            top: "0px",
+                            "touch-action": "none",
+                            "user-select": "none"
+                          },
+                          attrs: {
+                            id: "canvas_1",
+                            width: "380",
+                            height: "380",
+                            radius: "1"
+                          }
+                        }),
+                        _c("canvas", {
+                          staticClass:
+                            "upper-canvas workArea canvas-transition maincanvas",
+                          staticStyle: {
+                            position: "absolute",
+                            width: "380px",
+                            height: "380px",
+                            border: "1px solid rgb(204, 204, 204)",
+                            left: "0px",
+                            top: "0px",
+                            "touch-action": "none",
+                            "user-select": "none",
+                            cursor: "move"
+                          },
+                          attrs: { width: "380", height: "380" }
+                        })
+                      ]
+                    )
+                  ]
+                ),
+                _c(
+                  "div",
+                  {
+                    staticClass: "demo-image",
+                    staticStyle: {
+                      display: "none",
+                      width: "380px",
+                      height: "380px"
+                    },
+                    attrs: { dropcanvasid: "canvas_1" }
+                  },
+                  [
+                    _c("div", { staticClass: "demo-image-default" }, [
+                      _c("a", [
+                        _c("i", {
+                          staticClass: "fa fa-upload",
+                          attrs: { "aria-hidden": "true" }
+                        }),
+                        _vm._v("Upload an Image")
+                      ]),
+                      _c("span", [_vm._v("Maximum upload size: 25MB per file")])
+                    ])
+                  ]
+                ),
+                _c(
+                  "div",
+                  {
+                    staticClass: "canvas-container sidecanvas",
+                    staticStyle: {
+                      width: "20px",
+                      height: "380px",
+                      position: "absolute!important",
+                      "-moz-user-select": "none",
+                      left: "-20px",
+                      top: "0px",
+                      "pointer-events": "none"
+                    },
+                    attrs: { id: "canvas_container_left_1" }
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "canvas-container",
+                        staticStyle: {
+                          width: "20px",
+                          height: "380px",
+                          position: "relative",
+                          "user-select": "none"
+                        }
+                      },
+                      [
+                        _c("canvas", {
+                          staticClass:
+                            "workArea canvas-transition lower-canvas",
+                          staticStyle: {
+                            position: "absolute",
+                            width: "20px",
+                            height: "380px",
+                            "border-top": "1px solid rgb(204, 204, 204)",
+                            "border-bottom": "1px solid rgb(204, 204, 204)",
+                            "border-left": "1px solid rgb(204, 204, 204)",
+                            "border-image": "initial",
+                            "border-right": "none",
+                            left: "0px",
+                            top: "0px",
+                            "touch-action": "none",
+                            "user-select": "none",
+                            transform: "scale(-1, 1)"
+                          },
+                          attrs: {
+                            id: "canvas_left_1",
+                            width: "20",
+                            height: "380",
+                            radius: "1"
+                          }
+                        }),
+                        _c("canvas", {
+                          staticClass:
+                            "upper-canvas workArea canvas-transition",
+                          staticStyle: {
+                            position: "absolute",
+                            width: "20px",
+                            height: "380px",
+                            "border-top": "1px solid rgb(204, 204, 204)",
+                            "border-bottom": "1px solid rgb(204, 204, 204)",
+                            "border-left": "1px solid rgb(204, 204, 204)",
+                            "border-image": "initial",
+                            "border-right": "none",
+                            left: "0px",
+                            top: "0px",
+                            "touch-action": "none",
+                            "user-select": "none"
+                          },
+                          attrs: { width: "20", height: "380" }
+                        })
+                      ]
+                    )
+                  ]
+                ),
+                _c(
+                  "div",
+                  {
+                    staticClass: "canvas-container sidecanvas",
+                    staticStyle: {
+                      width: "380px",
+                      height: "20px",
+                      position: "absolute!important",
+                      "-moz-user-select": "none",
+                      left: "0px",
+                      top: "-20px",
+                      "pointer-events": "none"
+                    },
+                    attrs: { id: "canvas_container_top_1" }
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "canvas-container",
+                        staticStyle: {
+                          width: "380px",
+                          height: "20px",
+                          position: "relative",
+                          "user-select": "none"
+                        }
+                      },
+                      [
+                        _c("canvas", {
+                          staticClass:
+                            "workArea canvas-transition lower-canvas",
+                          staticStyle: {
+                            position: "absolute",
+                            width: "380px",
+                            height: "20px",
+                            "border-top": "1px solid rgb(204, 204, 204)",
+                            "border-right": "1px solid rgb(204, 204, 204)",
+                            "border-left": "1px solid rgb(204, 204, 204)",
+                            "border-image": "initial",
+                            "border-bottom": "none",
+                            left: "0px",
+                            top: "0px",
+                            "touch-action": "none",
+                            "user-select": "none",
+                            transform: "scale(1, -1)"
+                          },
+                          attrs: {
+                            id: "canvas_top_1",
+                            width: "380",
+                            height: "20",
+                            radius: "1"
+                          }
+                        }),
+                        _c("canvas", {
+                          staticClass:
+                            "upper-canvas workArea canvas-transition",
+                          staticStyle: {
+                            position: "absolute",
+                            width: "380px",
+                            height: "20px",
+                            "border-top": "1px solid rgb(204, 204, 204)",
+                            "border-right": "1px solid rgb(204, 204, 204)",
+                            "border-left": "1px solid rgb(204, 204, 204)",
+                            "border-image": "initial",
+                            "border-bottom": "none",
+                            left: "0px",
+                            top: "0px",
+                            "touch-action": "none",
+                            "user-select": "none"
+                          },
+                          attrs: { width: "380", height: "20" }
+                        })
+                      ]
+                    )
+                  ]
+                ),
+                _c(
+                  "div",
+                  {
+                    staticClass: "canvas-container sidecanvas right-shade",
+                    staticStyle: {
+                      width: "20px",
+                      height: "380px",
+                      position: "absolute!important",
+                      "-moz-user-select": "none",
+                      left: "380px",
+                      top: "0px",
+                      "pointer-events": "none"
+                    },
+                    attrs: { id: "canvas_container_right_1" }
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "canvas-container",
+                        staticStyle: {
+                          width: "20px",
+                          height: "380px",
+                          position: "relative",
+                          "user-select": "none"
+                        }
+                      },
+                      [
+                        _c("canvas", {
+                          staticClass:
+                            "workArea canvas-transition right-shade lower-canvas",
+                          staticStyle: {
+                            position: "absolute",
+                            width: "20px",
+                            height: "380px",
+                            "border-top": "1px solid rgb(204, 204, 204)",
+                            "border-right": "1px solid rgb(204, 204, 204)",
+                            "border-bottom": "1px solid rgb(204, 204, 204)",
+                            "border-image": "initial",
+                            "border-left": "none",
+                            left: "0px",
+                            top: "0px",
+                            "touch-action": "none",
+                            "user-select": "none",
+                            transform: "scale(-1, 1)"
+                          },
+                          attrs: {
+                            id: "canvas_right_1",
+                            width: "20",
+                            height: "380",
+                            radius: "1"
+                          }
+                        }),
+                        _c("canvas", {
+                          staticClass:
+                            "upper-canvas workArea canvas-transition right-shade",
+                          staticStyle: {
+                            position: "absolute",
+                            width: "20px",
+                            height: "380px",
+                            "border-top": "1px solid rgb(204, 204, 204)",
+                            "border-right": "1px solid rgb(204, 204, 204)",
+                            "border-bottom": "1px solid rgb(204, 204, 204)",
+                            "border-image": "initial",
+                            "border-left": "none",
+                            left: "0px",
+                            top: "0px",
+                            "touch-action": "none",
+                            "user-select": "none"
+                          },
+                          attrs: { width: "20", height: "380" }
+                        })
+                      ]
+                    )
+                  ]
+                ),
+                _c(
+                  "div",
+                  {
+                    staticClass: "canvas-container sidecanvas bottom-shade",
+                    staticStyle: {
+                      width: "380px",
+                      height: "20px",
+                      position: "absolute!important",
+                      "-moz-user-select": "none",
+                      left: "0px",
+                      top: "380px",
+                      "pointer-events": "none"
+                    },
+                    attrs: { id: "canvas_container_bottom_1" }
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "canvas-container",
+                        staticStyle: {
+                          width: "380px",
+                          height: "20px",
+                          position: "relative",
+                          "user-select": "none"
+                        }
+                      },
+                      [
+                        _c("canvas", {
+                          staticClass:
+                            "workArea canvas-transition bottom-shade lower-canvas",
+                          staticStyle: {
+                            position: "absolute",
+                            width: "380px",
+                            height: "20px",
+                            "border-right": "1px solid rgb(204, 204, 204)",
+                            "border-bottom": "1px solid rgb(204, 204, 204)",
+                            "border-left": "1px solid rgb(204, 204, 204)",
+                            "border-image": "initial",
+                            "border-top": "none",
+                            left: "0px",
+                            top: "0px",
+                            "touch-action": "none",
+                            "user-select": "none",
+                            transform: "scale(1, -1)"
+                          },
+                          attrs: {
+                            id: "canvas_bottom_1",
+                            width: "380",
+                            height: "20",
+                            radius: "1"
+                          }
+                        }),
+                        _c("canvas", {
+                          staticClass:
+                            "upper-canvas workArea canvas-transition bottom-shade",
+                          staticStyle: {
+                            position: "absolute",
+                            width: "380px",
+                            height: "20px",
+                            "border-right": "1px solid rgb(204, 204, 204)",
+                            "border-bottom": "1px solid rgb(204, 204, 204)",
+                            "border-left": "1px solid rgb(204, 204, 204)",
+                            "border-image": "initial",
+                            "border-top": "none",
+                            left: "0px",
+                            top: "0px",
+                            "touch-action": "none",
+                            "user-select": "none"
+                          },
+                          attrs: { width: "380", height: "20" }
+                        })
+                      ]
+                    )
+                  ]
+                )
               ]
             )
-          ]
-        )
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "builder__zoom-controls" }, [
-      _c("h5", [_vm._v("Zoom Photo")]),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "zoom-out-button",
-          attrs: { "data-tf-inspect": "-1996016692" }
-        },
-        [_c("span", { staticClass: "icon icon-minus-circle" })]
-      ),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "zoom-range",
-        attrs: { type: "range", step: "0.02", min: "0.89", max: "4.45" }
-      }),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "zoom-in-button",
-          attrs: { "data-tf-inspect": "-1996016692" }
-        },
-        [_c("span", { staticClass: "icon icon-plus-circle" })]
+          ])
+        ]
       )
     ])
   }
@@ -20043,8 +20134,8 @@ var render = function() {
               },
               attrs: { id: "canvas" },
               on: {
-                mousemove: function($event) {
-                  return _vm.getmove($event)
+                click: function($event) {
+                  return _vm.dragStart()
                 }
               }
             },
@@ -36647,6 +36738,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 // require('./bootstrap');
 
+ // import 'jquery-ui-dist/jquery-ui.js';
+// import 'jquery-ui-dist/jquery-ui.\css';
 
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
@@ -37011,8 +37104,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\xampp\htdocs\canvasPrint\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\canvasPrint\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\canvas-print\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\canvas-print\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

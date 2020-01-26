@@ -7,6 +7,8 @@
 // require('./bootstrap');
 import 'bootstrap';
 import'bootstrap/dist/css/bootstrap.css';
+// import 'jquery-ui-dist/jquery-ui.js';
+// import 'jquery-ui-dist/jquery-ui.\css';
 import { store } from './store.js';
 window.Vue = require('vue');
 import router from './router';
