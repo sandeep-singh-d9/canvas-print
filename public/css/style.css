@@ -1,0 +1,216 @@
+.main_div{
+    padding: 50px 0 30px 0;
+}
+.leftside_img {
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+}
+.leftside_img img {
+    width: 100%;
+    height: auto;
+}
+.right_div .nav-pills .nav-link {
+    color: #fe5521;
+    border: 1px solid #fe5521;
+    border-radius: 8px !important;
+    padding: 4px 20px;
+    font-weight: 500;
+    margin: 0px 7px;
+    font-size: 14px;
+}
+.right_div .nav-pills .nav-link.active , .right_div .nav-pills .nav-link:hover {
+    background:  #fe5521;
+    color: #fff;
+}
+.table {
+    font-size: 14px;
+    font-weight: 500;
+}
+.table del {
+    color: #a7a7a7;
+}
+.mainimage__preview {
+    margin: 0 auto;
+    position: relative;
+    opacity: 1;     
+}
+
+.mainimage__preview img {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    height: auto !important;
+}
+.image__preview_bottom-inner {
+    height: auto;
+}
+.builder__preview-section {
+    position: relative;
+    padding-left: 20px;
+    z-index: 10;
+}
+.image__preview_top, .image__preview_bottom-inner {
+    -moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
+    height: 20px;
+    overflow: hidden;
+}
+.image__preview_top {
+    border: 1px solid #000;
+    border-top: 1px dashed #000;
+    margin-left: 0px;
+}
+.innerimage_window {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    cursor: move;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+    cursor: grab;
+    cursor: grab, move;
+    padding-top:  66.6667%;
+}
+.innerimage_canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    width:170%; 
+    height: 102.38%; 
+}
+.innerimage_canvas>* {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: none;
+    max-height: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: none !important;
+}
+.image__preview_image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: none;
+    max-height: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: none !important;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    perspective: 1000px;
+    backface-visibility: hidden;
+}
+.image__preview_right {
+    border: 1px solid #000;
+    border-left: 1px dashed #000;
+    width: 20px;
+    display: block;
+    float: right;
+    overflow: hidden;
+    margin: 0px;
+}
+.image__preview_bottom {
+    height: 20px;
+    overflow: hidden;
+    border: 1px solid #000;
+    border-top: 1px dashed #000;
+    position: absolute;
+    margin: 0px;
+}
+
+.image__preview_bottom-inner {
+    height: auto;
+}
+.image__preview_left {
+    border: 1px solid #000;
+    border-left: 1px dashed #000;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+    position: absolute;
+    left: 0;
+    width: 20px;
+    display: block;
+    overflow: hidden;
+    float: left;
+    margin: 0px 35px 0 0;
+    top: 20px;
+}
+
+.mirrored .image__preview_right .innerimage_canvas {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+.mirrored .image__preview_right img {
+    -moz-transform: none;
+    -o-transform: none;
+    -webkit-transform: none;
+    transform: none;
+    filter: none;
+    -ms-filter: none;
+}
+
+.custome_price h2{
+    float: left;
+    margin-top: 20px;
+    font-size: 25px;
+    text-align: center;
+    width: 100%;
+}
+.custome_price h2 del {
+    margin: 0 10px;
+}
+.custome_price h2 span {
+    margin: 0 10px;
+}
+.offer_label {
+    font-size: 14px;
+    background: #fe5521;
+    color: #FFF;
+    padding: 4px 6px 4px 4px;
+    position: relative;
+    height: auto;
+    border-radius: 0 2px 2px 0;
+    -webkit-border-radius: 0 2px 2px 0;
+}
+.offer_label:after{
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 0.5px;
+    border: 13px solid transparent;
+    border-right: 13px solid #fe5521;
+}
+.btn.canvas_btn {
+    background:  #fe5521;
+    color: #fff;
+    border: 1px solid #fe5521;
+    border-radius: 0px;
+    padding: 8px 25px;
+}
+.btn.canvas_btn:hover {
+    background:  #fff;
+    color: #fe5521;
+    border: 1px solid #fe5521;
+}
