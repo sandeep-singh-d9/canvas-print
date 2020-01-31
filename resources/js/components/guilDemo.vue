@@ -2,13 +2,13 @@
     <div class="builder container right_div">
         <div class="row m-0">
             <div class="col-lg-6 p-5 mt-3 mirrored">
-                <div class="mainimage__preview" :style="{opacity: '1', width: selectedHeight+'px'}">
+                <div :class="{'mainimage__preview': true, 'wrapped_edge': imageType == 'wrapedge' ? true : false}" :style="{opacity: '1', width: selectedHeight+'px'}">
                     <div class="h-scale" :style="{marginLeft: '20px', width: dynamicWidth}"><span id="scalewidth">{{selectedCanvasWidth}} inch</span></div>
                     <div class="v-scale" :style="{marginTop: '20px', height: dynamicHeight}"><span id="scaleheight">{{selectedCanvasHeight}} inch</span></div>
                     <div class="image__preview_section" :style="{paddingLeft: '20px', width: topWrapWidth+40+'px'}">
                         <div class="image__preview_top" :style="{height: '20px', width:dynamicWidth, opacity:imageType != 'roleCanvas' ? '1': '0'}">
                             <div class="innerimage_window" :style="{width: '100%', height: 'auto',  paddingTop:dynamicHeight}">
-                                <div class="innerimage_canvas" style="top:0; left:-2px" :style="{ backgroundColor: imageType == 'color' ?  color : ''}">
+                                <div class="innerimage_canvas" :style="{ backgroundColor: imageType == 'color' ?  color : '', left: imageType == 'color' ?  '0px' : '-2px', top:'0' }">
                                     <img class="image__preview_image transform-after-drag" :src="imagePath"  v-show="imageType != 'color'"  :style="{width:imageWidth, height:imageHeight}" >
                                 </div>
                             </div>
@@ -16,15 +16,15 @@
 
                         <div class="image__preview_right" :style="{height: dynamicHeight, width: '20px', opacity:imageType != 'roleCanvas' ? '1': '0'}">
                             <div class="innerimage_window" :style="{height: dynamicHeight, width: dynamicWidth, paddingTop:dynamicHeight}">
-                                <div class="innerimage_canvas" style="top:-1px; right:0;left: auto;" :style="{ backgroundColor: imageType == 'color' ?  color : ''}">
+                                <div class="innerimage_canvas" :style="{ backgroundColor: imageType == 'color' ?  color : '' , top: imageType == 'color' ?  '0px' : '-1px', right:'0', left:'auto' }">
                                     <img class="image__preview_image transform-after-drag" :src="imagePath"  v-show="imageType != 'color'"  :style="{marginLeft: '0px', width:imageWidth, height:imageHeight}">
                                 </div>
                             </div>
                         </div>
 
                         <div class="image__preview wrapper" :class="{'borderdotted': imageType == 'roleCanvas'}"  :style="{width:dynamicWidth,height:dynamicHeight }">
-                            <div class="innerimage_window map" :style="{width: '100%', height: 'auto' ,paddingTop:dynamicHeight, cursor:'all-scroll'}" >
-                                <div  class="innerimage_canvas" style="top:0; left:0">
+                            <div class="innerimage_window" :style="{width: '100%', height: 'auto' ,paddingTop:dynamicHeight, cursor:'all-scroll'}" >
+                                <div  class="innerimage_canvas map" style="top:0; left:0">
                                     <img class="image__preview_main transform-after-drag" :src="imagePath" :style="{width:imageWidth, height:imageHeight}" >
                                 </div>
                             </div>
@@ -33,7 +33,7 @@
                         <div class="image__preview_bottom" :style="{height: '20px', width: dynamicWidth, opacity:imageType != 'roleCanvas' ? '1': '0'}">
                             <div class="image__preview_bottom-inner">
                                 <div class="innerimage_window" :style="{width:'100%', height:'auto',  paddingTop:bottomImageHeight-5+'px'}">
-                                    <div class="innerimage_canvas" style="top:-5px; left:0" :style="{ backgroundColor: imageType == 'color' ?  color : ''}">
+                                    <div class="innerimage_canvas" :style="{ backgroundColor: imageType == 'color' ?  color : '', top: imageType == 'color' ?  '0px' : '-5px', left:'0'}">
                                         <img class="image__preview_image transform-after-drag" :src="imagePath"  v-show="imageType != 'color'"  :style="{marginTop: '0px', width:imageWidth, height:imageHeight}">
                                     </div>
                                 </div>
@@ -42,7 +42,7 @@
 
                         <div class="image__preview_left" :style="{height: dynamicHeight, width: '20px', top: '20px', opacity:imageType != 'roleCanvas' ? '1': '0'}">
                             <div class="innerimage_window" :style="{width:dynamicWidth,height:dynamicHeight, paddingTop:'100%'}">
-                                <div class="innerimage_canvas" style="top:-2px; left:0" :style="{ backgroundColor: imageType == 'color' ?  color : ''}">
+                                <div class="innerimage_canvas" :style="{ backgroundColor: imageType == 'color' ?  color : '', top: imageType == 'color' ?  '0px' : '-2px', left:'0'}">
                                     <img class="image__preview_image transform-after-drag" :src="imagePath"  v-show="imageType != 'color'"  :style="{width:imageWidth, height:imageHeight}" >
                                 </div>
                             </div>
@@ -65,13 +65,107 @@
                         <div class="row">
                             <div class="col-lg-4 pr-0">
                                 <select v-model="selectedCanvasHeight" @change="getContext" class="form-control">
-                                    <option v-for="(item,index) in optionHeight" :key="index" :value="item">{{item}}</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>
+                                    <option value="36">36</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="45">45</option>
+                                    <option value="46">46</option>
+                                    <option value="47">47</option>
+                                    <option value="48">48</option>
+                                    <option value="49">49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                    <option value="53">53</option>
+                                    <option value="54">54</option>
+                                    <option value="55">55</option>
                                 </select>
                             </div>
                             <div class="col-lg-2 p-0 text-center pt-2"><label><b> X </b></label></div>
                             <div class="col-lg-4 pl-0">
                                 <select v-model="selectedCanvasWidth" @change="getContext" class="form-control">
-                                    <option v-for="(item,index) in optionWidth" :key="index" :value="item">{{item}}</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>
+                                    <option value="36">36</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="45">45</option>
+                                    <option value="46">46</option>
+                                    <option value="47">47</option>
+                                    <option value="48">48</option>
+                                    <option value="49">49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                    <option value="53">53</option>
+                                    <option value="54">54</option>
+                                    <option value="55">55</option>
                                 </select>
                             </div>
                             <div class="col-lg-2 p-0 text-center pt-2"><label><b> (Inches) </b></label></div>
@@ -125,9 +219,9 @@
                         </li>
                         <li>
                             <a href="#">
-                                <div :class="{'inner_image': true , 'active' : imageType == 'wrap' ? true : false  }"  >
+                                <div :class="{'inner_image': true , 'active' : imageType == 'wrapedge' ? true : false  }"  >
                                     <img src="" alt="" title="">
-                                    <input type="radio" class="radio_selected" name="imageType" v-model="imageType" value="wrap">
+                                    <input type="radio" class="radio_selected" name="imageType" v-model="imageType" value="wrapedge">
                                 </div>
                                 <label>Wrapped Edge</label>
                             </a>
@@ -150,9 +244,7 @@
                 <color-picker v-model="color" v-show="imageType == 'color'"></color-picker>
             </div>
         </div>
-        <div>     
-        </div>
-  </div>
+	</div>
 </template>
 
 <script>
@@ -181,17 +273,15 @@ export default {
             dynamicWidth:'380',
             dynamicHeight:'380',
             bottomImageHeight:'380',
-            imagePath:'',
+            imagePath:'https://img1.goodfon.com/wallpaper/nbig/7/8e/priroda-most-lyudi-more-voda.jpg',
             imageHeight: '',
             imageWidth: '',
-            fileStatckImageWidth: '',
-            fileStatckImageHeight: '',
+            fileStatckImageWidth: 1332,
+            fileStatckImageHeight: 850,
             color:'',
             zoomValue:'',
             imageType : '',
-            savedMainImageStyle:'',
-            optionHeight:[],
-            optionWidth:[]
+            savedMainImageStyle:''
 
         }
     },
@@ -205,19 +295,20 @@ export default {
             Draggable.create(".map img", {
                 type:"x,y",
                     bounds:".wrapper",
-                    edgeResistance:1,
-                    onDrag:self.yourFunction,
+                    // edgeResistance:1,
+                    onDrag:yourFunction,
                     onRelease:self.releaseDragEvents
             });
             function yourFunction(e){
+                console.log(e.target.style.width, 'asasaa')
                 let translate = e.target.style.transform
                 self.translateData = translate
                 self.changeTansslate(translate)
-                // this.savedMainImageStyle = e.target.style.cssText
-                $('.transform-after-drag').attr('style',e.target.style.cssText)
-                if(e.target.style.width == '' || e.target.style.width == undefined ){
-                    console.log(this.savedMainImageStyle,'saved')
-                    $('.transform-after-drag').attr('style',this.savedMainImageStyle)
+                this.savedMainImageStyle = e.target.style.cssText
+                if(e.target.style.width != ''){
+                    $('.transform-after-drag').attr('style',e.target.style.cssText)
+                }else{
+                    self.layoutModify()
                 }
                 if(self.zoomValue != ''){
                     let scale = 1 + parseFloat(self.zoomValue * 0.03)
@@ -225,12 +316,6 @@ export default {
                     $('.image__preview_image').css('transform','scale(' + scale + ')'+translate)
                 }
             }
-        this.optionHeight = [];
-        this.optionWidth = [];
-        for (let index = 8; index <= 55; index++) {
-            this.optionHeight.push(index)                
-            this.optionWidth.push(index)                
-        }
             
     },
     computed: {
@@ -253,17 +338,9 @@ export default {
             $('.image__preview_image').css('transform','scale(' + scale + ')')
         },
         releaseDragEvents(){
-            const self = this
-            if($('.image__preview_main')[0].style[5] == undefined){
-               $('.transform-after-drag').attr('style',this.savedMainImageStyle)
-                Draggable.create(".map img", {
-                type:"x,y",
-                    bounds:".wrapper",
-                    edgeResistance:1,
-                    onDrag:self.yourFunction,
-                    onRelease:self.releaseDragEvents
-                });
-            }
+            // if($('.image__preview_main')[0].style[5] == undefined){
+            //   location.reload()
+            // }
         },
         imageUpload(){
             const options = {
@@ -408,28 +485,6 @@ export default {
                     this.imageWidth='auto !important' 
                     console.log('111111asas')
                 }
-            }
-            var self = this
-            setTimeout(function(){
-                self.savedMainImageStyle = $('.transform-after-drag').attr('style')
-                console.log(self.savedMainImageStyle)
-            }, 100)
-        },
-        yourFunction(e){
-            const self = this;
-            let translate = e.target.style.transform
-            self.translateData = translate
-            self.changeTansslate(translate)
-            // this.savedMainImageStyle = e.target.style.cssText
-            $('.transform-after-drag').attr('style',e.target.style.cssText)
-            if(e.target.style.width == '' || e.target.style.width == undefined ){
-                console.log(this.savedMainImageStyle,'saved')
-                $('.transform-after-drag').attr('style',this.savedMainImageStyle)
-            }
-            if(self.zoomValue != ''){
-                let scale = 1 + parseFloat(self.zoomValue * 0.03)
-                $('.image__preview_main').css('transform','scale(' + scale + ')'+translate)
-                $('.image__preview_image').css('transform','scale(' + scale + ')'+translate)
             }
         }
     }

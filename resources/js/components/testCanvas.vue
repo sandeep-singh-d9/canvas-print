@@ -1,192 +1,207 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Example Component</div>
-                    <div class="card-body">
-                        I'm an example component.
+    <div class="builder container">
+        <div class="row m-0">
+            <div class="col-lg-6 p-5 mirrored">
+                <div class="mainimage__preview" :style="{opacity: '1', width: selectedHeight+'px'}">
+                    <div class="image__preview_section" :style="{paddingLeft: '20px', width: topWrapWidth+40+'px'}">
+                        <div class="image__preview_top" :style="{height: '20px', width:dynamicWidth,}">
+                            <div class="innerimage_window"
+                                 :style="{width: '100%', height: 'auto',  paddingTop:dynamicHeight}">
+                                <div class="innerimage_canvas" style="top:0; left: -30%;">
+                                    <img class="image__preview_image transform-after-drag" :src="imagePath">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="image__preview_right" :style="{height: dynamicHeight, width: '20px'}">
+                            <div class="innerimage_window"
+                                 :style="{height: '380px', width: '380px', paddingTop:dynamicHeight}">
+                                <div class="innerimage_canvas" style="top:0; right: -112.594px; left: auto;">
+                                    <img class="image__preview_image transform-after-drag" :src="imagePath"
+                                         style=" margin-left: 0px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="image__preview" :style="{width:dynamicWidth,height:dynamicHeight}">
+                            <div class="innerimage_window wrapper"
+                                 :style="{width: '100%', height: 'auto' ,paddingTop:dynamicHeight, cursor:'all-scroll'}">
+                                <div class="innerimage_canvas map" style="top:0; left: -30%;">
+                                    <img class="image__preview_main transform-after-drag"
+                                         style="touch-action: none;cursor: grab;transform: translate3d(0px, 0px, 0px);user-select: none;z-index: 1001;"
+                                         :src="imagePath">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="image__preview_bottom" :style="{height: '20px', width: dynamicWidth}">
+                            <div class="image__preview_bottom-inner">
+                                <div class="innerimage_window"
+                                     :style="{width:'100%', height:'auto',  paddingTop:bottomImageHeight-5+'px'}">
+                                    <div class="innerimage_canvas" style="top:0; left: -30%;">
+                                        <img class="image__preview_image transform-after-drag" :src="imagePath"
+                                             style=" margin-top: 0px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="image__preview_left" :style="{height: dynamicHeight, width: '20px', top: '20px'}">
+                            <div class="innerimage_window"
+                                 :style="{width:dynamicWidth,height:dynamicHeight, paddingTop:'100%'}">
+                                <div class="innerimage_canvas" style="top:0; left: -30%;">
+                                    <img class="image__preview_image transform-after-drag" :src="imagePath">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <select v-model="selectedWidth" @change="getContext">
-                        <option value="380">8</option>
-                        <option value="390">9</option>
-                        <option value="400">10</option>
-                        <option value="410">11</option>
-                    </select>
-                    <select v-model="selectedHeight" @change="getContext">
-                        <option value="380">8</option>
-                        <option value="390">9</option>
-                        <option value="400">10</option>
-                        <option value="410">11</option>
-                    </select>
-                    <button @click="insertImage"> ADD Image</button>
-                    <canvas  @mousedown="startDrag" @mousemove="doDrag" id='canvas' :style="{width:selectedWidth+'px', height:selectedHeight+'px', cursor:'all-scroll'}">
-                        Sorry, your browser does not support the canvas tag.
-                    </canvas>
+                </div>
+               <div></div>
+            </div>
+
+            <div class="col-lg-6 p-5">
+                <div>
+                    <button @click="imageUpload">UploadImage</button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <select v-model="selectedCanvasWidth" @change="getContext" class="form-control">
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="16">16</option>
+                            <option value="18">18</option>
+                            <option value="20">20</option>
+                            <option value="24">24</option>
+                            <option value="30">30</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <select v-model="selectedCanvasHeight" @change="getContext" class="form-control">
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="18">18</option>
+                            <option value="24">24</option>
+                            <option value="30">30</option>
+                            <option value="36">36</option>
+                            <option value="36">36</option>
+                            <option value="40">40</option>
+                        </select>
+                    </div>
                 </div>
             </div>
+            + and -
+        </div>
+        <div>
         </div>
     </div>
 </template>
 
 <script>
+    import {
+        mapState,
+        mapActions,
+        mapGetters,
+        mapMutations
+    } from 'vuex';
+    import gsap from "gsap";
+    // or get other plugins:
+    import Draggable from "gsap/Draggable";
+
+    gsap.registerPlugin(Draggable);
+    import * as filestack from 'filestack-js';
+
+    const client = filestack.init('AzESQpbNMRkulCa1DzhIPz');
     export default {
-        mounted() {
-            console.log('Component mounted.')
-            window.addEventListener('mouseup', this.stopDrag);
-        },
-        data(){
+        data() {
             return {
-                selectedHeight: '380',
+                selectedHeight: '420',
                 selectedWidth: '380',
-                isDraggable: false,
-                currentX: 0,
-                currentY: 0
+                topWrapWidth: 380,
+                selectedCanvasHeight: '',
+                selectedCanvasWidth: '',
+                dynamicWidth: '380',
+                dynamicHeight: '380',
+                bottomImageHeight: '380',
+                imagePath: ''
+
             }
         },
-        methods:{
-            insertImage(){
-                // Cache a reference to the html element
-                var canvas = document.getElementById('canvas');
-                // Set the drawing surface dimensions to match the canvas
-                canvas.width  = canvas.scrollWidth;
-                canvas.height = canvas.scrollHeight;
-                // Get a reference to the 2d drawing context / api
-                var ctx = canvas.getContext('2d');
-                // this.currentX = canvas.width/2;
-                // this.currentY = canvas.height/2;
-                // Create a new image object
-                var image = new Image();
-                // Callback, executed when the image is loaded
-                // See previous video for a more flexible solution 
+        mounted() {
+            this.layoutModify()
+            Draggable.create(".map img", {
+                type: "x,y",
+                bounds: ".wrapper",
+                edgeResistance: 1,
+                onDrag: yourFunction
+            });
+
+            function yourFunction(e) {
+                console.log(e.target.style.cssText, 'sasas')
+                $(document).ready(function () {
+                    $('.transform-after-drag').attr('style', e.target.style.cssText)
+                })
+            }
+        },
+        computed: {
+            ...mapState([
+                'widthHeightSelect',
+                'customHeight',
+                'customWidth'
+            ])
+        },
+        methods: {
+            ...mapActions([
+                'ACTION_CHANGE_STATE',
+            ]),
+            imageUpload() {
+                const options = {
+                    onUploadDone: updateForm,
+                };
+                const picker = client.picker(options);
+                picker.open();
                 const self = this
-                image.onload = function(){
-                self.Go()
-                // Select a rectangle from the source image,
-                // and then draw is as normal.
-                // ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-                // (image, srcX, srcY, srcWidth, srcHeight, x, y, width, height)
-                // console.log(image.naturalWidth/image.naturalHeight, 'sasas' , self.selectedWidth/self.selectedHeight)
-                // ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, self.selectedWidth, self.selectedHeight);
+
+                function updateForm(result) {
+                    console.log(result, 'asasassa')
+                    const fileData = result.filesUploaded[0];
+                    self.imagePath = fileData.url;
                 }
-                // Start our image loading
-                image.src = '/images/career_bg.jpg';
             },
-            getContext(){
-                console.log(this.selectedHeight , this.selectedWidth)
-                this.insertImage()
+            getContext() {
+                console.log(this.selectedHeight, this.selectedWidth)
+                this.ACTION_CHANGE_STATE(['widthHeightSelect', this.selectedCanvasWidth + 'x' + this.selectedCanvasHeight])
+                this.layoutModify()
             },
-            getmove(e){
-                console.log(e, 'sasas')
-                var canvas = document.getElementById('canvas');
-                // // Set the drawing surface dimensions to match the canvas
-                // canvas.width  = canvas.scrollWidth;
-                // canvas.height = canvas.scrollHeight;
-                // Get a reference to the 2d drawing context / api
-                var ctx = canvas.getContext('2d');
-                // Create a new image object
-                var img = new Image();
-                img.src = '/images/career_bg.jpg';
-                var x = -1 * (img.width - canvas.width) / 2 * (1 + Math.cos(e.clientX / Math.PI));
-                var y = -1 * (img.height - canvas.height) / 2 * (1 + -Math.sin(e.clientY / Math.PI));
-                const self = this
-                ctx.drawImage(img, x, y);
-                ctx.moveTo(x, y); 
-                // ctx.drawImage(img, 0, 0, self.selectedWidth, self.selectedHeight, x, y, self.selectedWidth, self.selectedHeight);
-            },
-            Go(){
-                // this.MouseEvents();
-                const self = this
-                setInterval(function() {
-                    self.ResetCanvas();
-                    self.DrawImage();
-                }, 1000/30);
-            },
-            dragStart(){
-                // this.isDraggable = true
-                
-                // this.DrawImage()
-            },
-            ResetCanvas(){
-                var canvas = document.getElementById('canvas');
-                var ctx = canvas.getContext('2d');
-                ctx.fillStyle = '#fff';
-                ctx.fillRect(0,0, canvas.width, canvas.height)
-            },
-            MouseEvents(){
-                var canvas = document.getElementById('canvas');
-                var currentX = canvas.width/2;
-                var currentY = canvas.height/2;
-                const self = this
-                var image = new Image();
-                canvas.onmouseover = function(e) {
-                    var mouseX = e.pageX - e.target.offsetLeft;
-                    var mouseY = e.pageY - e.target.offsetTop;
-                    console.log(e.which)    
-                    if (event.which == 1) {
-                            //currentX = mouseX;
-                        self.isDraggable = true;
-                    //currentY = mouseY;
-                    }
-                };
-                canvas.onmousemove = function(e) {
-                    if (self.isDraggable) {
-                        console.log('sasas')
-                        self.currentX = e.pageX - e.target.offsetLeft;
-                        self.currentY = e.pageY - e.target.offsetTop;
-                    }
-                };
-                canvas.onmouseup = function(e) {
-                    self.isDraggable = false;
-                };
-                canvas.onmouseout = function(e) {
-                    self.isDraggable = false;
-                };
-            },
-            DrawImage(){
-                var  canvas = document.getElementById("canvas");
-                var context = canvas.getContext("2d");
-                var image = new Image();
-                image.src = '/images/career_bg.jpg';
-                const self = this;
-                // console.log(image.naturalWidth/image.naturalHeight, 'sasas' , self.selectedWidth/self.selectedHeight)
-                context.drawImage(image, self.currentX-(image.width/2), self.currentY-(image.height/2));
-                console.log(self.currentX-(image.width/2), self.currentY-(image.height/2))
-                // context.drawImage(image, x, y, image.naturalWidth, image.naturalHeight);
-                
-            },
-            getMousemove(e){
-                console.log(e.which, 'asasasasa')
-                console.log(e, 'asasasasas')
-                self.isDraggable = true;
-            },
-            startDrag() {
-                this.isDraggable = true;
-                this.currentX = this.currentX ;
-                this.currentY = this.currentY ;
-            },
-            stopDrag() {
-                this.isDraggable = false;
-                // this.currentX = this.currentY = 0;
-            },
-            doDrag(event) {
-                if (this.isDraggable) {
-                    console.log(event, 'sasasa')
-                    // this.currentX = event.clientX;
-                    // this.currentY = event.clientY;
-                    var  canvas = document.getElementById("canvas");
-                    var context = canvas.getContext("2d");
-                    var image = new Image();
-                    this.currentX = event.layerX;
-                    this.currentY = event.layerY
+            layoutModify() {
+                this.selectedCanvasWidth = parseInt(this.$store.state.widthHeightSelect.split('x')[0]) || this.$store.state.customWidth
+                this.selectedCanvasHeight = parseInt(this.$store.state.widthHeightSelect.split('x')[1]) || this.$store.state.customHeight
+                if (this.selectedCanvasWidth == this.selectedCanvasHeight) {
+                    this.dynamicWidth = '380px'
+                    this.dynamicHeight = '380px'
+                    this.topWrapWidth = 380
+                    /*For bottom image */
+                    this.bottomImageHeight = 380
+                } else if (this.selectedCanvasWidth > this.selectedCanvasHeight) {
+                    this.dynamicWidth = '380px'
+                    this.dynamicHeight = 380 * this.selectedCanvasHeight / this.selectedCanvasWidth + 'px'
+                    this.topWrapWidth = 380
+                    /*For bottom image */
+                    this.bottomImageHeight = 380 * this.selectedCanvasHeight / this.selectedCanvasWidth
+                    console.log(this.dynamicHeight, 'asas')
+                } else if (this.selectedCanvasHeight > this.selectedCanvasWidth) {
+                    this.dynamicHeight = '380px'
+                    this.dynamicWidth = 380 * this.selectedCanvasWidth / this.selectedCanvasHeight + 'px'
+                    this.topWrapWidth = 380 * this.selectedCanvasWidth / this.selectedCanvasHeight
+                    this.bottomImageHeight = 380
+                    console.log(this.dynamicWidth, 'asas')
                 }
             }
         }
     }
 </script>
-<style>
-canvas {
-  /*Add a border around canvas for legibility*/
-  border: 1px solid grey;
-}
-</style>

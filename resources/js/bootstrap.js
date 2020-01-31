@@ -11,6 +11,7 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
+    require('../../node_modules/guillotine/js/jquery.guillotine.min.js')
 } catch (e) {}
 
 /**

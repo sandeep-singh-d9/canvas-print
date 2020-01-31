@@ -8,10 +8,16 @@ require('./bootstrap');
 // import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
+import 'guillotine/css/jquery.guillotine.css';
+
 // import axios from 'axios';
 import { store } from './store.js';
 window.Vue = require('vue');
 import router from './router';
+
+import ColorPicker from 'vue-iro-color-picker';
+
+Vue.component('color-picker', ColorPicker);
 
 //Vue.use(axios);
 
